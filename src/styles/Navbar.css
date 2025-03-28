@@ -6,14 +6,14 @@
 }
 
 .navbar {
-  position: sticky; 
-  top: 0; 
+  position: sticky;
+  top: 0;
   z-index: 1000;
   display: flex;
   align-items: center;
   padding-left: 1rem !important;
   padding-right: 1rem !important;
-  gap: 2rem; 
+  gap: 2rem;
   background-color: #000;
 }
 
@@ -39,7 +39,7 @@
 }
 
 .nav-link-custom:hover {
-  color: #f1c40f !important; 
+  color: #f1c40f !important;
 }
 
 /* Dropdown menu styling */

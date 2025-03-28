@@ -14,7 +14,8 @@
   color: black !important;
 }
 legend{
-  font-size: 12px !important;
+  font-size: 16px !important;
+  font-weight: bold;
 }
 .form-section {
   margin-bottom: 0.3rem;
@@ -83,6 +84,12 @@ legend{
   margin-left: 0.5rem;
   font-size: 12px;
 }
+
+#sameAsPrimary {
+  visibility: visible !important;
+  margin-left: 0.5rem;
+}
+
 
 /*Contact form */
 

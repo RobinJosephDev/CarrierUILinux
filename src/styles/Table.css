@@ -27,8 +27,8 @@
   z-index: 999;
   align-items: center;
   justify-content: space-between;
-  padding-left: 4rem;
-  padding-right: 4rem;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
   background-color: #586069;
   color: #fff;
 }
@@ -77,15 +77,16 @@
 
 .table th,
 .table td {
-  padding: 10px; /* Adjust padding for a more compact table */
+  padding: 6px; /* Adjust padding for a more compact table */
   text-align: left;
+  vertical-align: middle;
   font-size: 12px; /* Adjusted font size for table text */
   color: #1c2737;
   border: none; /* Remove all borders */
 }
 
 .table tr {
-  border-bottom: 1px solid #ddd; /* Add horizontal lines between rows */
+  border-bottom: 1px solid #ddd;
 }
 
 .table tr:last-child {
@@ -118,7 +119,7 @@ thead {
 .table-container {
   max-height: 40rem;
   overflow-y: auto;
-  border: 1px solid #ddd;
+  border: none;
   position: relative;
 }
 
@@ -128,12 +129,12 @@ thead {
   background: #f5f5f5;
   z-index: 1;
   text-align: left;
-  padding: 10px;
+  padding: 8px;
   border-bottom: 1px solid #ddd;
 }
 
 .table td {
-  padding: 10px;
+  padding: 8px;
   border-bottom: 1px solid #ddd;
 }
 
@@ -183,8 +184,6 @@ thead {
   display: inline-block;
 }
 
-/* Style the sortable header container */
-/* Style the sortable header container */
 .sortable-header {
   display: flex;
   align-items: center;
@@ -192,16 +191,12 @@ thead {
   justify-content: space-between;
 }
 
-/* Style the sort icon */
 .sort-icon {
   margin-left: 5px;
-  font-size: 12px; /* Adjust the size of the arrows */
+  font-size: 12px;
   visibility: visible !important;
 }
 
-/* You can add styles for ascending and descending arrows if needed */
-
-/* Adjust visibility of arrows */
 .sortable-header .sort-icon {
   display: inline-block;
   visibility: visible;
@@ -209,19 +204,19 @@ thead {
 }
 
 .sortable-header .sort-icon:before {
-  content: ''; /* Default sort direction */
+  content: '';
   visibility: visible;
   font-size: 9px;
 }
 
 .sortable-header.sorted-asc .sort-icon:before {
-  visibility: visible; /* Show the arrow for ascending sort */
+  visibility: visible;
   content: '▲';
   font-size: 9px;
 }
 
 .sortable-header.sorted-desc .sort-icon:before {
-  visibility: visible; /* Show the arrow for descending sort */
+  visibility: visible;
   content: '▼';
   font-size: 9px;
 }
@@ -238,26 +233,25 @@ thead {
   height: 40px;
   animation: spin 1s linear infinite;
 }
-/* CSS class for pickup date/time */
+
 .pickup-date-time {
-  color: #ff4d4d; /* White text */
-  font-weight: bold; /* Make text bold */
-  padding: 4px 8px; /* Add padding */
-  border-radius: 10rem; /* Rounded corners */
-  display: inline-block; /* Make it inline to prevent stretching */
-  font-size: 12px; /* Slightly smaller font size */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  color: #ff4d4d;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 10rem;
+  display: inline-block;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* CSS class for delivery date/time */
 .delivery-date-time {
-  color: #ff7f50; /* White text */
-  font-weight: bold; /* Make text bold */
-  padding: 4px 8px; /* Add padding */
-  border-radius: 10rem; /* Rounded corners */
-  display: inline-block; /* Make it inline to prevent stretching */
-  font-size: 12px; /* Slightly smaller font size */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  color: #ff7f50;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 10rem;
+  display: inline-block;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .anticon-calendar {
   color: #1c2737 !important;

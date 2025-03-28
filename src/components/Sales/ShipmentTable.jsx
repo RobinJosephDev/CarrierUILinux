@@ -23,7 +23,7 @@ const ShipmentTable = () => {
   const [isViewModalOpen, setViewModalOpen] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
   const API_URL = import.meta.env.VITE_API_BASE_URL;
-  const perPage = 100;
+  const perPage = 10;
 
   const getUserNameById = (id) => {
     const user = users.find((user) => user.id === id);

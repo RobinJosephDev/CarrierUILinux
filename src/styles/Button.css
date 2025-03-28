@@ -12,18 +12,7 @@
   cursor: pointer;
   transition: background-color 0.3s;
 }
-.view-fu-button{
-  width: 2rem;
-  height: 2rem;
-  border: none;
-  background-color: #4184e8;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
+
 .add-button:hover {
   background-color: #167abc;
 }
@@ -33,20 +22,40 @@
   height: 1rem;
 }
 
+.view-fu-button {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #007bff;
+  transition: background-color 0.3s;
+}
+
+.view-fu-button svg {
+  width: 1rem;
+  height: 1rem;
+}
+
 .delete-button {
   width: 2rem;
   height: 2rem;
+  border: none;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   background-color: #db1c1c;
+  transition: background-color 0.3s;
 }
 
 .delete-button svg {
-  width: 1.1rem;
-  height: 1.1rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .send-email-button {
@@ -100,10 +109,6 @@
   color: #1890ff;
 }
 
-.btn-delete:hover {
-  color: #ff4d4f;
-}
-
 .btn-convert {
   background-color: #4caf50;
   color: white;
@@ -137,7 +142,7 @@
 /* Form buttons */
 
 .btn-submit {
-  background-color: #28a745;
+  background-color: #3399cc !important;
   color: white;
   font-size: 14px;
   padding: 0.2rem;
@@ -150,11 +155,12 @@
 }
 
 .btn-submit:hover {
-  background-color: #0056b3;
+  background-color: #297aa3;
+  transform: scale(1);
 }
 .btn-cancel {
-  padding: 0.75rem 1rem;
-  font-size: 14px;
+  padding: 0px 12px;
+  font-size: 15px;  font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, sans-serif;
   color: #000;
   background-color: #f7f0f3;
   border: none;

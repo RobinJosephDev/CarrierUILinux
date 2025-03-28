@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import '../../styles/Table.css';
 import '../../styles/Badge.css';
 import '../../styles/Button.css';
@@ -6,7 +5,24 @@ import '../../styles/Pagination.css';
 import '../../styles/Search.css';
 import '../../styles/Navbar.css';
 
-const Table = ({ data, headers, handleSort, sortBy, sortDesc,  }) => {
+export interface TableHeader {
+  key: string;
+  label: string | JSX.Element; // Accept both string and JSX.Element
+  width?: string;
+  render?: (item: any) => JSX.Element; // Generalized item type
+}
+
+
+export interface TableProps {
+  data: any[];
+  headers: TableHeader[];
+  handleSort: (key: string) => void; // Keep it as string for flexibility
+  sortBy: string;
+  sortDesc: boolean;
+}
+
+
+export const Table: React.FC<TableProps> = ({ data, headers, handleSort, sortBy, sortDesc }) => {
   return (
     <div className="table-container">
       <div className="table-wrapper">
@@ -14,22 +30,16 @@ const Table = ({ data, headers, handleSort, sortBy, sortDesc,  }) => {
           <thead>
             <tr>
               {headers.map((header) => (
-                <th
-                  key={header.key}
-                  style={{ width: header.width || 'auto' }}
-                  onClick={() => handleSort(header.key)}
-                  className="col"
-                >
+                <th key={header.key} style={{ width: header.width || 'auto' }} onClick={() => handleSort(header.key)} className="col">
                   <div className="header-content">
                     {header.label}
-                    {/* Sort icon */}
                     <i
                       className={`fa ${
                         sortBy === header.key
                           ? sortDesc
                             ? 'fa-sort-down' // descending
-                            : ''   // ascending
-                          : 'fa-sort-down'        // default sort icon for unsorted columns
+                            : '' // ascending
+                          : 'fa-sort-down' // default sort icon for unsorted columns
                       }`}
                       style={{ marginLeft: '5px' }}
                     ></i>
@@ -50,20 +60,11 @@ const Table = ({ data, headers, handleSort, sortBy, sortDesc,  }) => {
             ))}
           </tbody>
         </table>
+
+        
       </div>
     </div>
   );
-};
-
-Table.propTypes = {
-  data: PropTypes.array.isRequired,
-  headers: PropTypes.array.isRequired,
-  handleSort: PropTypes.func.isRequired,
-  sortBy: PropTypes.string.isRequired,
-  sortDesc: PropTypes.bool.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  totalPages: PropTypes.number.isRequired,
-  setCurrentPage: PropTypes.func.isRequired,
 };
 
 export default Table;
