@@ -2,8 +2,8 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { FC, useCallback, useState } from 'react';
 import { z } from 'zod';
 import DOMPurify from 'dompurify';
-import { Quote, Location } from '../../../types/QuoteTypes';
-import { useGoogleAutocomplete } from '../../../hooks/useGoogleAutocomplete';
+import { Quote, Location } from '../../types/QuoteTypes';
+import { useGoogleAutocomplete } from '../../hooks/useGoogleAutocomplete';
 
 declare global {
   interface Window {
@@ -11,17 +11,17 @@ declare global {
   }
 }
 
-interface EditQuoteDeliveryProps {
-  formQuote: Quote;
-  setFormQuote: React.Dispatch<React.SetStateAction<Quote>>;
-  quote_delivery: Location[];
+interface QuotePickupProps {
+  quote: Quote;
+  setQuote: React.Dispatch<React.SetStateAction<Quote>>;
+  quote_pickup: Location[];
   index: number;
-  handleDeliveryChange: (index: number, updatedDelivery: Location) => void;
-  handleRemoveDelivery: (index: number) => void;
-  onAddDelivery: () => void;
+  handlePickupChange: (index: number, updatedPickup: Location) => void;
+  handleRemovePickup: (index: number) => void;
+  onAddPickup: () => void;
 }
 
-const deliverySchema = z.object({
+const pickupSchema = z.object({
   address: z
     .string()
     .max(255, 'Address is too long')
@@ -70,10 +70,10 @@ const deliverySchema = z.object({
     .max(100, 'Equipment description cannot exceed 100 characters')
     .regex(/^[a-zA-Z0-9\s.,'-]*$/, 'Invalid equipment format')
     .optional(),
-  delivery_po: z
+  pickup_po: z
     .string()
-    .max(100, 'Delivery PO cannot exceed 50 characters')
-    .regex(/^[a-zA-Z0-9\s.-]*$/, 'Invalid delivery PO format')
+    .max(100, 'Pickup PO cannot exceed 50 characters')
+    .regex(/^[a-zA-Z0-9\s.-]*$/, 'Invalid pickup PO format')
     .optional(),
   packages: z.number().int().min(1, 'Packages must be at least 1').max(99999, 'Packages cannot exceed 99,999').optional(),
   weight: z.number().min(0, 'Weight cannot be negative').max(1000000, 'Weight cannot exceed 1,000,000 kg').optional(),
@@ -89,23 +89,16 @@ const deliverySchema = z.object({
     .optional(),
 });
 
-const EditQuoteDelivery: FC<EditQuoteDeliveryProps> = ({
-  setFormQuote,
-  quote_delivery,
-  index,
-  handleDeliveryChange,
-  handleRemoveDelivery,
-  onAddDelivery,
-}) => {
-  const delivery = quote_delivery[index] ?? {};
+const QuotePickup: FC<QuotePickupProps> = ({ setQuote, quote_pickup, index, handlePickupChange, handleRemovePickup, onAddPickup }) => {
+  const pickup = quote_pickup[index] ?? {};
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const updateAddressFields = (place: google.maps.places.PlaceResult) => {
     const getComponent = (type: string) => place.address_components?.find((c) => c.types.includes(type))?.long_name || '';
 
-    setFormQuote((prev) => ({
+    setQuote((prev) => ({
       ...prev,
-      quote_delivery: prev.quote_delivery.map((loc, i) =>
+      quote_pickup: prev.quote_pickup.map((loc, i) =>
         i === index
           ? {
               ...loc,
@@ -122,7 +115,7 @@ const EditQuoteDelivery: FC<EditQuoteDeliveryProps> = ({
 
   const addressRef = useGoogleAutocomplete(updateAddressFields);
 
-  const validateAndSetDelivery = useCallback(
+  const validateAndSetPickup = useCallback(
     (field: keyof Location, value: string) => {
       const sanitizedValue = DOMPurify.sanitize(value);
       let parsedValue: string | number = sanitizedValue;
@@ -133,8 +126,8 @@ const EditQuoteDelivery: FC<EditQuoteDeliveryProps> = ({
       }
 
       let error = '';
-      const updatedDelivery = { ...delivery, [field]: parsedValue };
-      const result = deliverySchema.safeParse(updatedDelivery);
+      const updatedPickup = { ...pickup, [field]: parsedValue };
+      const result = pickupSchema.safeParse(updatedPickup);
 
       if (!result.success) {
         const fieldError = result.error.errors.find((err) => err.path[0] === field);
@@ -142,9 +135,9 @@ const EditQuoteDelivery: FC<EditQuoteDeliveryProps> = ({
       }
 
       setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
-      handleDeliveryChange(index, updatedDelivery);
+      handlePickupChange(index, updatedPickup);
     },
-    [delivery, handleDeliveryChange, index]
+    [pickup, handlePickupChange, index]
   );
 
   const fields = [
@@ -158,7 +151,7 @@ const EditQuoteDelivery: FC<EditQuoteDeliveryProps> = ({
     { label: 'Time', key: 'time', placeholder: 'Enter time (HH:MM)' },
     { label: 'Currency', key: 'currency', placeholder: 'Enter currency (e.g., USD, EUR)' },
     { label: 'Equipment', key: 'equipment', placeholder: 'Enter equipment details' },
-    { label: 'Delivery PO', key: 'delivery_po', placeholder: 'Enter delivery PO number' },
+    { label: 'Pickup PO', key: 'pickup_po', placeholder: 'Enter pickup PO number' },
     { label: 'Packages', key: 'packages', placeholder: 'Enter number of packages' },
     { label: 'Weight', key: 'weight', placeholder: 'Enter weight (kg/lbs)' },
     { label: 'Dimensions', key: 'dimensions', placeholder: 'Enter dimensions (LxWxH cm/inches)' },
@@ -175,8 +168,8 @@ const EditQuoteDelivery: FC<EditQuoteDeliveryProps> = ({
               id={`${key}-${index}`}
               name={key}
               type={'text'}
-              value={(delivery[key as keyof Location] as string | number) || ''}
-              onChange={(e) => validateAndSetDelivery(key as keyof Location, e.target.value)}
+              value={(pickup[key as keyof Location] as string | number) || ''}
+              onChange={(e) => validateAndSetPickup(key as keyof Location, e.target.value)}
               placeholder={placeholder}
               ref={key === 'address' ? addressRef : undefined}
             />
@@ -190,10 +183,10 @@ const EditQuoteDelivery: FC<EditQuoteDeliveryProps> = ({
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '0px' }}>
-        <button type="button" onClick={onAddDelivery} className="add-button">
+        <button type="button" onClick={onAddPickup} className="add-button">
           <PlusOutlined />
         </button>
-        <button type="button" onClick={() => handleRemoveDelivery(index)} className="delete-button">
+        <button type="button" onClick={() => handleRemovePickup(index)} className="delete-button">
           <DeleteOutlined />
         </button>
       </div>
@@ -201,4 +194,4 @@ const EditQuoteDelivery: FC<EditQuoteDeliveryProps> = ({
   );
 };
 
-export default EditQuoteDelivery;
+export default QuotePickup;

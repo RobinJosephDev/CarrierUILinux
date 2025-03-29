@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import { Quote } from '../../types/QuoteTypes';
+import { Shipment } from '../../types/ShipmentTypes';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api';
 
-const useQuoteTable = () => {
-  const [quotes, setQuotes] = useState<Quote[]>([]);
+const useShipmentTable = () => {
+  const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [sortBy, setSortBy] = useState<keyof Quote>('created_at');
+  const [sortBy, setSortBy] = useState<keyof Shipment>('created_at');
   const [sortDesc, setSortDesc] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
+  const [selectedShipment, setSelectedShipment] = useState<Shipment | null>(null);
   const [isEditModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [isAddModalOpen, setAddModalOpen] = useState<boolean>(false);
   const [isViewModalOpen, setViewModalOpen] = useState<boolean>(false);
@@ -25,25 +25,25 @@ const useQuoteTable = () => {
   });
 
   //Fetch
-  const fetchQuotes = async () => {
+  const fetchShipments = async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No token found');
 
       setLoading(true);
-      const { data } = await axios.get<Quote[]>(`${API_URL}/quote`, {
+      const { data } = await axios.get<Shipment[]>(`${API_URL}/shipment`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setQuotes(data);
+      setShipments(data);
     } catch (error) {
-      console.error('Error loading quotes:', error);
+      console.error('Error loading shipments:', error);
       handleFetchError(error);
     } finally {
       setLoading(false);
     }
   };
   useEffect(() => {
-    fetchQuotes();
+    fetchShipments();
   }, []);
 
   const handleFetchError = (error: any) => {
@@ -61,16 +61,16 @@ const useQuoteTable = () => {
     if (sortBy === key) {
       setSortDesc(!sortDesc);
     } else {
-      setSortBy(key as keyof Quote);
+      setSortBy(key as keyof Shipment);
       setSortDesc(false);
     }
   };
 
-  const filteredQuotes = quotes.filter((quote) =>
-    Object.values(quote).some((val) => val?.toString().toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredShipments = shipments.filter((shipment) =>
+    Object.values(shipment).some((val) => val?.toString().toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const sortedQuotes = filteredQuotes.sort((a, b) => {
+  const sortedShipments = filteredShipments.sort((a, b) => {
     let valA = a[sortBy] ?? '';
     let valB = b[sortBy] ?? '';
 
@@ -83,8 +83,8 @@ const useQuoteTable = () => {
     return 0;
   });
 
-  const paginatedData = sortedQuotes.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
-  const totalPages = Math.ceil(filteredQuotes.length / rowsPerPage);
+  const paginatedData = sortedShipments.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+  const totalPages = Math.ceil(filteredShipments.length / rowsPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -95,7 +95,7 @@ const useQuoteTable = () => {
     if (selectedIds.length === paginatedData.length) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(paginatedData.map((quote) => quote.id));
+      setSelectedIds(paginatedData.map((shipment) => shipment.id));
     }
   };
 
@@ -104,29 +104,31 @@ const useQuoteTable = () => {
   };
 
   //Modal
-  const openEditModal = (quote: Quote) => {
-    setSelectedQuote(quote);
+  const openEditModal = (shipment: Shipment) => {
+    setSelectedShipment(shipment);
     setEditModalOpen(true);
   };
 
   const closeEditModal = () => {
     setEditModalOpen(false);
-    setSelectedQuote(null);
+    setSelectedShipment(null);
   };
 
-  const openViewModal = (quote: Quote) => {
-    setSelectedQuote(quote);
+  const openViewModal = (shipment: Shipment) => {
+    setSelectedShipment(shipment);
     setViewModalOpen(true);
   };
 
   const closeViewModal = () => {
     setViewModalOpen(false);
-    setSelectedQuote(null);
+    setSelectedShipment(null);
   };
 
   //CRUD
-  const updateQuote = (updatedQuote: Quote) => {
-    setQuotes((prevQuotes) => prevQuotes.map((quote) => (quote.id === updatedQuote.id ? { ...quote, ...updatedQuote } : quote)));
+  const updateShipment = (updatedShipment: Shipment) => {
+    setShipments((prevShipments) =>
+      prevShipments.map((shipment) => (shipment.id === updatedShipment.id ? { ...shipment, ...updatedShipment } : shipment))
+    );
   };
 
   const deleteSelected = async () => {
@@ -149,14 +151,14 @@ const useQuoteTable = () => {
         const token = localStorage.getItem('token');
         if (!token) throw new Error('No token found');
 
-        await Promise.all(selectedIds.map((id) => axios.delete(`${API_URL}/quote/${id}`, { headers: { Authorization: `Bearer ${token}` } })));
+        await Promise.all(selectedIds.map((id) => axios.delete(`${API_URL}/shipment/${id}`, { headers: { Authorization: `Bearer ${token}` } })));
 
-        setQuotes((prevQuotes) => prevQuotes.filter((quote) => !selectedIds.includes(quote.id)));
+        setShipments((prevShipments) => prevShipments.filter((shipment) => !selectedIds.includes(shipment.id)));
         setSelectedIds([]);
-        Swal.fire('Deleted!', 'Selected quotes have been deleted.', 'success');
+        Swal.fire('Deleted!', 'Selected shipments have been deleted.', 'success');
       } catch (error) {
-        console.error('Error deleting quotes:', error);
-        Swal.fire({ icon: 'error', title: 'Error!', text: 'Failed to delete selected quotes.' });
+        console.error('Error deleting shipments:', error);
+        Swal.fire({ icon: 'error', title: 'Error!', text: 'Failed to delete selected shipments.' });
       }
     }
   };
@@ -164,7 +166,7 @@ const useQuoteTable = () => {
   //Email
   const sendEmails = async () => {
     if (selectedIds.length === 0) {
-      Swal.fire({ icon: 'warning', title: 'No quote selected', text: 'Please select quote to send emails to.' });
+      Swal.fire({ icon: 'warning', title: 'No shipment selected', text: 'Please select shipment to send emails to.' });
       return;
     }
 
@@ -174,7 +176,7 @@ const useQuoteTable = () => {
 
       await axios.post(
         `${API_URL}/email`,
-        { ids: selectedIds, ...emailData, module: 'quotes' },
+        { ids: selectedIds, ...emailData, module: 'shipments' },
         {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
         }
@@ -190,8 +192,8 @@ const useQuoteTable = () => {
   };
 
   return {
-    fetchQuotes,
-    quotes,
+    fetchShipments,
+    shipments,
     loading,
     searchQuery,
     setSearchQuery,
@@ -207,7 +209,7 @@ const useQuoteTable = () => {
     isAddModalOpen,
     isViewModalOpen,
     isEmailModalOpen,
-    selectedQuote,
+    selectedShipment,
     openEditModal,
     closeEditModal,
     openViewModal,
@@ -223,9 +225,9 @@ const useQuoteTable = () => {
     setEmailData,
     sendEmails,
     handleSort,
-    updateQuote,
+    updateShipment,
     handlePageChange,
   };
 };
 
-export default useQuoteTable;
+export default useShipmentTable;

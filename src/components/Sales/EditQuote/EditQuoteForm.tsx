@@ -1,6 +1,6 @@
 import EditQuoteGeneral from './EditQuoteGeneral';
-import EditQuotePickup from './EditQuotePickup';
-import EditQuoteDelivery from './EditQuoteDelivery';
+import QuotePickup from '../QuotePickup';
+import QuoteDelivery from '../QuoteDelivery';
 import { PlusOutlined } from '@ant-design/icons';
 import { Quote, Location } from '../../../types/QuoteTypes';
 import useEditQuote from '../../../hooks/edit/useEditQuote';
@@ -42,9 +42,9 @@ const EditQuoteForm: React.FC<EditQuoteFormProps> = ({ quote, onClose, onUpdate 
               <hr />
               <div className="form-row">
                 {formQuote.quote_pickup?.map((pickup, index) => (
-                  <EditQuotePickup
+                  <QuotePickup
                     quote={formQuote}
-                    setOrder={setFormQuote}
+                    setQuote={setFormQuote}
                     key={index}
                     quote_pickup={formQuote.quote_pickup}
                     index={index}
@@ -64,9 +64,9 @@ const EditQuoteForm: React.FC<EditQuoteFormProps> = ({ quote, onClose, onUpdate 
               <hr />
               <div className="form-row">
                 {formQuote.quote_delivery.map((delivery, index) => (
-                  <EditQuoteDelivery
+                  <QuoteDelivery
                     quote={formQuote}
-                    setOrder={setFormQuote}
+                    setQuote={setFormQuote}
                     key={index}
                     quote_delivery={formQuote.quote_delivery}
                     index={index}

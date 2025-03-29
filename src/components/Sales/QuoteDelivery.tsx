@@ -2,8 +2,8 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { FC, useCallback, useState } from 'react';
 import { z } from 'zod';
 import DOMPurify from 'dompurify';
-import { Quote, Location } from '../../../types/QuoteTypes';
-import { useGoogleAutocomplete } from '../../../hooks/useGoogleAutocomplete';
+import { Quote, Location } from '../../types/QuoteTypes';
+import { useGoogleAutocomplete } from '../../hooks/useGoogleAutocomplete';
 
 declare global {
   interface Window {

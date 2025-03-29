@@ -1,7 +1,7 @@
 import '../../../styles/Form.css';
 import QuoteGeneral from './QuoteGeneral';
-import QuotePickup from './QuotePickup';
-import QuoteDelivery from './QuoteDelivery';
+import QuotePickup from '../QuotePickup';
+import QuoteDelivery from '../QuoteDelivery';
 import { PlusOutlined } from '@ant-design/icons';
 import { useAddQuote } from '../../../hooks/add/useAddQuote';
 
