@@ -53,7 +53,7 @@ const LoginPage = () => {
   };
 
   const handleLoginSuccess = (data: { token: string; user: { id: number; role: string } }) => {
-    const expiryTime = Date.now() + 1 * 60 * 60 * 1000;
+    const expiryTime = Date.now() + 6 * 60 * 60 * 1000;
 
     localStorage.setItem('token', data.token);
     localStorage.setItem('userId', data.user.id.toString());

@@ -7,18 +7,50 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
 dist
 dist-ssr
-*.local
 
-# Editor directories and files
+# Build files
+.build/
+.out/
+.next/
+.cache/
+
+# Environment variables (DO NOT COMMIT)
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+.env.test
+.env.backup
+
+# Keep example env (important for reference)
+!.env.example
+
+# Editor files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Testing coverage
+coverage/
+*.lcov
+
+# Storybook build files
+.storybook-out/
+
+# MacOS & system files
+Thumbs.db
+Desktop.ini

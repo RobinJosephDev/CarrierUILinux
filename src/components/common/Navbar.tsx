@@ -4,7 +4,7 @@ import { useUser } from '../../UserProvider';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import '../../styles/Navbar.css';
-import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { FiClipboard, FiUsers, FiLogOut } from 'react-icons/fi';
 

@@ -15,7 +15,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     };
 
     checkSession();
-    const interval = setInterval(checkSession, 10 * 1000);
+    const interval = setInterval(checkSession, 60 * 1000);
 
     return () => clearInterval(interval); 
   }, [userRole]);
