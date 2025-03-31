@@ -54,7 +54,7 @@ const deliverySchema = z.object({
     .optional(),
   date: z
     .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
+    .regex(/^\d{2}-\d{2}-\d{4}$/, { message: 'Date must be in DD-MM-YYYY format' })
     .optional(),
   time: z
     .string()
@@ -141,38 +141,49 @@ const QuoteDelivery: FC<QuoteDeliveryProps> = ({ setQuote, quote_delivery, index
   );
 
   const fields = [
-    { label: 'Address', key: 'address', placeholder: 'Enter street address' },
-    { label: 'City', key: 'city', placeholder: 'Enter city name' },
-    { label: 'State', key: 'state', placeholder: 'Enter state' },
-    { label: 'Country', key: 'country', placeholder: 'Enter country' },
-    { label: 'Postal Code', key: 'postal', placeholder: 'Enter postal code' },
-    { label: 'Phone', key: 'phone', placeholder: 'Enter phone number' },
-    { label: 'Date', key: 'date', placeholder: 'Enter date (YYYY-MM-DD)' },
+    { label: 'Address', key: 'address', type: 'text', placeholder: 'Enter street address' },
+    { label: 'City', key: 'city', type: 'text', placeholder: 'Enter city name' },
+    { label: 'State', key: 'state', type: 'text', placeholder: 'Enter state' },
+    { label: 'Country', key: 'country', type: 'text', placeholder: 'Enter country' },
+    { label: 'Postal Code', key: 'postal', type: 'text', placeholder: 'Enter postal code' },
+    { label: 'Phone', key: 'phone', type: 'text', placeholder: 'Enter phone number' },
+    { label: 'Date', key: 'date', type: 'date', placeholder: 'Enter date (YYYY-MM-DD)' },
     { label: 'Time', key: 'time', placeholder: 'Enter time (HH:MM)' },
-    { label: 'Currency', key: 'currency', placeholder: 'Enter currency (e.g., USD, EUR)' },
-    { label: 'Equipment', key: 'equipment', placeholder: 'Enter equipment details' },
-    { label: 'Delivery PO', key: 'delivery_po', placeholder: 'Enter delivery PO number' },
-    { label: 'Packages', key: 'packages', placeholder: 'Enter number of packages' },
-    { label: 'Weight', key: 'weight', placeholder: 'Enter weight (kg/lbs)' },
-    { label: 'Dimensions', key: 'dimensions', placeholder: 'Enter dimensions (LxWxH cm/inches)' },
-    { label: 'Notes', key: 'notes', placeholder: 'Enter additional notes' },
+    { label: 'Currency', key: 'currency', type: 'text', placeholder: 'Enter currency (e.g., USD, EUR)' },
+    { label: 'Equipment', key: 'equipment', type: 'text', placeholder: 'Enter equipment details' },
+    { label: 'Pickup PO', key: 'pickup_po', type: 'text', placeholder: 'Enter pickup PO number' },
+    { label: 'Packages', key: 'packages', type: 'text', placeholder: 'Enter number of packages' },
+    { label: 'Weight', key: 'weight', type: 'text', placeholder: 'Enter weight (kg/lbs)' },
+    { label: 'Dimensions', key: 'dimensions', type: 'text', placeholder: 'Enter dimensions (LxWxH cm/inches)' },
+    { label: 'Notes', key: 'notes', type:'textarea', placeholder: 'Enter additional notes' },
   ];
 
   return (
     <fieldset className="form-section" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
       <div className="form-grid" style={{ display: 'grid', gap: '10px', gridTemplateColumns: 'repeat(5, 1fr)', flex: 1 }}>
-        {fields.map(({ label, key, placeholder }) => (
+        {fields.map(({ label, key, type, placeholder }) => (
           <div className="form-group" key={key} style={{ display: 'flex', flexDirection: 'column' }}>
             <label htmlFor={`${key}-${index}`}>{label}</label>
-            <input
-              id={`${key}-${index}`}
-              name={key}
-              type={'text'}
-              value={(delivery[key as keyof Location] as string | number) || ''}
-              onChange={(e) => validateAndSetDelivery(key as keyof Location, e.target.value)}
-              placeholder={placeholder}
-              ref={key === 'address' ? addressRef : undefined}
-            />
+            {type === 'textarea' ? (
+              <textarea
+                id={`${key}-${index}`}
+                name={key}
+                value={(delivery[key as keyof Location] as string) || ''}
+                onChange={(e) => validateAndSetDelivery(key as keyof Location, e.target.value)}
+                placeholder={placeholder}
+                rows={4}
+              />
+            ) : (
+              <input
+                id={`${key}-${index}`}
+                name={key}
+                type={type}
+                value={(delivery[key as keyof Location] as string | number) || ''}
+                onChange={(e) => validateAndSetDelivery(key as keyof Location, e.target.value)}
+                placeholder={placeholder}
+                ref={key === 'address' ? addressRef : undefined}
+              />
+            )}
             {errors[key] && (
               <span className="error" style={{ color: 'red' }}>
                 {errors[key]}
