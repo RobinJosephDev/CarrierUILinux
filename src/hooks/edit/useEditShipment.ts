@@ -5,7 +5,7 @@ import { Shipment } from '../../types/ShipmentTypes';
 
 const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
 
-const useEditShipment = (shipment: Shipment | null, onClose: () => void) => {
+const useEditShipment = (shipment: Shipment | null, onClose: () => void, onUpdate: (shipment: Shipment) => void) => {
   const [formShipment, setFormShipment] = useState<Shipment>({
     id: 0,
     ship_load_date: '',
@@ -42,9 +42,35 @@ const useEditShipment = (shipment: Shipment | null, onClose: () => void) => {
     }
   }, [shipment]);
 
+  const updateShipment = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token || typeof token !== 'string') {
+        Swal.fire({ icon: 'error', title: 'Unauthorized', text: 'Please log in again.' });
+        return;
+      }
+
+      const response = await axios.put(`${API_URL}/shipment/${formShipment.id}`, formShipment, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      Swal.fire({ icon: 'success', title: 'Updated!', text: 'Quote updated successfully.' });
+      onUpdate(response.data);
+      onClose();
+    } catch (error: any) {
+      console.error('Error updating quote:', error.response?.data || error.message);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.response?.status === 401 ? 'Unauthorized. Please log in again.' : 'Failed to update quote.',
+      });
+    }
+  };
+
   return {
     formShipment,
     setFormShipment,
+    updateShipment,
   };
 };
 
