@@ -53,9 +53,11 @@ const EditQuoteForm: React.FC<EditQuoteFormProps> = ({ quote, onClose, onUpdate 
                     handleRemovePickup={handleRemovePickup}
                   />
                 ))}
-                <button type="button" onClick={handleAddPickup} className="add-button">
-                  <PlusOutlined />
-                </button>
+                {formQuote.quote_pickup.length === 0 && (
+                  <button type="button" onClick={handleAddPickup} className="add-button">
+                    <PlusOutlined />
+                  </button>
+                )}
               </div>
             </fieldset>
 
@@ -75,9 +77,11 @@ const EditQuoteForm: React.FC<EditQuoteFormProps> = ({ quote, onClose, onUpdate 
                     handleRemoveDelivery={handleRemoveDelivery}
                   />
                 ))}
-                <button type="button" onClick={handleAddDelivery} className="add-button">
-                  <PlusOutlined />
-                </button>
+                {formQuote.quote_delivery.length === 0 && (
+                  <button type="button" onClick={handleAddDelivery} className="add-button">
+                    <PlusOutlined />
+                  </button>
+                )}
               </div>
             </fieldset>
           </>

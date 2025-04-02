@@ -19,7 +19,7 @@ const useEditQuote = (quote: Quote | null, onClose: () => void, onUpdate: (quote
     quote_tarp: false,
     quote_hazmat: false,
     quote_pickup: [],
-    quote_delivery: [],
+    quote_delivery: [], 
     created_at: '',
     updated_at: '',
   });
