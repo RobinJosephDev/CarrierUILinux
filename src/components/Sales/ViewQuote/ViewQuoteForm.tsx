@@ -29,13 +29,45 @@ const ViewQuoteForm: React.FC<ViewQuoteFormProps> = ({ quote, onClose }) => {
   });
 
   useEffect(() => {
+    console.log('quote:', quote); 
+    console.log('quote_pickup:', quote?.quote_pickup);
+
     if (quote) {
+      let parsedPickup = [];
+      let parsedDelivery = [];
+
+      if (Array.isArray(quote.quote_pickup)) {
+        parsedPickup = quote.quote_pickup;
+      } else if (typeof quote.quote_pickup === 'string') {
+        try {
+          parsedPickup = JSON.parse(quote.quote_pickup);
+          if (!Array.isArray(parsedPickup)) {
+            parsedPickup = [];
+          }
+        } catch (error) {
+          console.error('Failed to parse quote_pickup:', error);
+          parsedPickup = [];
+        }
+      }
+
+      if (Array.isArray(quote.quote_delivery)) {
+        parsedDelivery = quote.quote_delivery;
+      } else if (typeof quote.quote_delivery === 'string') {
+        try {
+          parsedDelivery = JSON.parse(quote.quote_delivery);
+          if (!Array.isArray(parsedDelivery)) {
+            parsedDelivery = [];
+          }
+        } catch (error) {
+          console.error('Failed to parse quote_delivery:', error);
+          parsedDelivery = [];
+        }
+      }
+
       setFormQuote({
         ...quote,
-        quote_pickup: Array.isArray(quote.quote_pickup) ? quote.quote_pickup : JSON.parse((quote.quote_pickup as any) || '[]'),
-        quote_delivery: Array.isArray(quote.quote_delivery)
-          ? quote.quote_delivery
-          : JSON.parse((quote.quote_delivery as any) || '[]'),
+        quote_pickup: parsedPickup,
+        quote_delivery: parsedDelivery,
       });
     }
   }, [quote]);
@@ -61,7 +93,7 @@ const ViewQuoteForm: React.FC<ViewQuoteFormProps> = ({ quote, onClose }) => {
               <ViewQuoteDelivery key={index} delivery={delivery} index={index} />
             ))}
           </div>
-        </fieldset>      
+        </fieldset>
         <div className="form-actions">
           <button type="button" className="btn-cancel" onClick={onClose} style={{ padding: '9px 15px' }}>
             Cancel
