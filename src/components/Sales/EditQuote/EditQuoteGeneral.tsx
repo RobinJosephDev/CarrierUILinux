@@ -128,7 +128,7 @@ const EditQuoteGeneral: React.FC<EditQuoteGeneralProps> = ({ formQuote, setFormQ
             value={formQuote.quote_type}
             onChange={(e) => setFormQuote((prevQuote) => ({ ...prevQuote, quote_type: e.target.value }))}
           >
-            <option value="">Select...</option>
+            <option value="" disabled>Select...</option>
             {loadTypeOptions.map((option) => (
               <option key={option} value={option}>
                 {option}

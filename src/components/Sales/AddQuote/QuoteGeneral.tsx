@@ -124,7 +124,7 @@ const QuoteGeneral: React.FC<QuoteGeneralProps> = ({ quote, setQuote }) => {
             Load Type <span style={{ color: 'red' }}>*</span>
           </label>
           <select id="equipment" value={quote.quote_type} onChange={(e) => setQuote((prevQuote) => ({ ...prevQuote, quote_type: e.target.value }))}>
-            <option value="">Select...</option>
+            <option value="" disabled>Select...</option>
             {loadTypeOptions.map((option) => (
               <option key={option} value={option}>
                 {option}
