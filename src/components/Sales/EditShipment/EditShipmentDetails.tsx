@@ -17,7 +17,7 @@ interface EditShipmentDetailsProps {
 const shipmentSchema = z.object({
   ship_load_date: z
     .string()
-    .regex(/^\d{2}-\d{2}-\d{4}$/, { message: 'Date must be in DD-MM-YYYY format' })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Date must be in YYYY-MM-DD format' })
     .optional(),
   ship_pickup_location: z
     .string()
@@ -34,14 +34,22 @@ const shipmentSchema = z.object({
     .max(150, 'Driver name must be at most 150 characters')
     .regex(/^[a-zA-Z0-9\s.,'-]*$/, 'Only letters, numbers,spaces, apostrophes, periods, commas, and hyphens allowed')
     .optional(),
-  ship_weight: z.number().positive('Weight must be a positive number').max(999999, 'Weight must not exceed 999,999').optional(),
+  ship_weight: z
+    .string()
+    .max(20, 'Weight cannot exceed 20 characters')
+    .regex(/^\d{1,3}(,\d{3})*(\.\d{1,2})?$/, 'Enter a valid amount (e.g., 1000, 1,000.50)')
+    .optional(),
   ship_ftl_ltl: z.enum(['FTL', 'LTL'], { message: 'Please select a valid load type' }).optional(),
   ship_equipment: z
     .string()
     .max(150, 'Equipment must be at most 150 characters')
     .regex(/^[a-zA-Z0-9\s.,'-]*$/, 'Only letters, numbers,spaces, apostrophes, periods, commas, and hyphens allowed')
     .optional(),
-  ship_price: z.number().positive('Price must be a positive number').max(999999, 'Price must not exceed 999,999').optional(),
+  ship_price: z
+    .string()
+    .max(20, 'Price cannot exceed 20 characters')
+    .regex(/^\d{1,3}(,\d{3})*(\.\d{1,2})?$/, 'Enter a valid amount (e.g., 1000, 1,000.50)')
+    .optional(),
   ship_notes: z
     .string()
     .max(500, 'Notes cannot exceed 500 characters')
@@ -87,20 +95,24 @@ const EditShipmentDetails: React.FC<EditShipmentDetailsProps> = ({ formShipment,
   const validateAndSetShipment = (field: keyof Shipment, value: string | boolean) => {
     let sanitizedValue: string | boolean | number = value;
 
-    if (field === 'ship_weight' || field === 'ship_price') {
-      sanitizedValue = value ? Number(value) : '';
-    }
+    let transformedValue = sanitizedValue;
 
-    let error = '';
-    const tempShipment = { ...formShipment, [field]: sanitizedValue };
+    if (field === 'ship_weight' || (field === 'ship_price' && typeof sanitizedValue === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(sanitizedValue))) {
+      transformedValue = sanitizedValue;
+    }
+    const tempShipment = { ...formShipment, [field]: transformedValue };
     const result = shipmentSchema.safeParse(tempShipment);
 
     if (!result.success) {
-      const fieldError = result.error.errors.find((err) => err.path[0] === field);
-      error = fieldError ? fieldError.message : '';
+      const fieldErrors: Record<string, string> = {};
+      result.error.errors.forEach((err) => {
+        fieldErrors[err.path[0]] = err.message;
+      });
+      setErrors(fieldErrors);
+    } else {
+      setErrors({});
     }
 
-    setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
     setFormShipment(tempShipment);
   };
 

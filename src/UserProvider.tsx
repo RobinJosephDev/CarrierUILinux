@@ -18,7 +18,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     window.addEventListener('storage', syncUserRole);
 
     const resetTokenExpiry = () => {
-      const expiryTime = Date.now() + 6 * 60 * 60 * 1000;
+      const expiryTime = Date.now() + 1 * 60 * 60 * 1000;
       localStorage.setItem('tokenExpiry', expiryTime.toString());
     };
 
